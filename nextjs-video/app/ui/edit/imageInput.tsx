@@ -2,13 +2,17 @@
 import { useState } from "react"
 
 export default function  ImageInput(){
+    document.body.appendChild(document.createElement("canvas"));
+
     const [selectedImage, setSelectedImage] = useState("");
     const [writtenText, setWrittenText] = useState("");
     function handleImage(e: React.ChangeEvent<HTMLInputElement>): void {
         console.log(e.target.files);
         setSelectedImage(URL.createObjectURL(e.target.files[0]));
     }
+
     function handleText(e: React.ChangeEvent<HTMLInputElement>): void {
+        document.body.removeChild(document.querySelector("canvas"));
         setWrittenText(e.target.value);
         let img = new Image();
 
@@ -27,8 +31,6 @@ export default function  ImageInput(){
 
             }
             img.src = `${selectedImage}`;
-            
-
     } 
 
     return(
