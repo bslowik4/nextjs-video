@@ -1,10 +1,12 @@
 'use client';
 import { useState } from "react"
+import { createVideo } from "@/app/lib/createVideo";
 
 export default function  ImageInput(){
     const [selectedImage, setSelectedImage] = useState("");
     const [writtenText, setWrittenText] = useState("");
     const [imageWithText, setImageWithText] = useState("");
+    const [createdVideo, setCreatedVideo] = useState("");
 
 
     function handleImage(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -38,6 +40,12 @@ export default function  ImageInput(){
         img.src = `${selectedImage}`;
     }
 
+    async function displayVideo() {
+        let video = await createVideo([selectedImage, imageWithText]);
+        console.log("działa")
+        setCreatedVideo(video);
+    }
+
     return(
         <>  
         <input type="file" onChange={handleImage} />
@@ -45,6 +53,8 @@ export default function  ImageInput(){
         <input type="text" onChange={handleText} className="text-black"/>
         <button type="button" onClick={addTextToImage}>Add text to image</button>
         <img src={imageWithText} alt={imageWithText}></img>
+        <button type="button" onClick={displayVideo}>Create video</button>
+        <video src={createdVideo} autoPlay controls id="test"></video>
         </>
 
     )

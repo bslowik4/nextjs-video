@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "ffmpeg.js": "^4.2.9003",
+    "fs": "^0.0.1-security",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
