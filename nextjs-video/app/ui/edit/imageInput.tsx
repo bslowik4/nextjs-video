@@ -5,7 +5,6 @@ export default function  ImageInput(){
     const [selectedImage, setSelectedImage] = useState("");
     const [writtenText, setWrittenText] = useState("");
     const [imageWithText, setImageWithText] = useState("");
-    const ffmpeg = require('ffmpeg.js');
 
 
     function handleImage(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -38,8 +37,6 @@ export default function  ImageInput(){
         };
         img.src = `${selectedImage}`;
     }
-    function generateVideo() {
-    }
 
     return(
         <>  
@@ -48,7 +45,7 @@ export default function  ImageInput(){
         <input type="text" onChange={handleText} className="text-black"/>
         <button type="button" onClick={addTextToImage}>Add text to image</button>
         <img src={imageWithText} alt={imageWithText}></img>
-        <button type="button" onClick={generateVideo}>generate video</button>
         </>
+
     )
 }
