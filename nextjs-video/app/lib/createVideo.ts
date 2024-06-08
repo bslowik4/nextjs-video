@@ -10,10 +10,10 @@ export async function createVideo(images:Array<string>){
     //let imageToCombine = images.map((src, i) => ({name: `${src}${i}`, data: src }));
     ffmpeg({
         MEMFS: [
-            { name: 'image1.jpg', data: image1 },
-            { name: 'image2.jpg', data: image2 }
+            { name: 'test1.jpg', data: image1 },
+            { name: 'test2.jpg', data: image2 }
         ],
-        arguments: ['-framerate', '1', '-i', 'image%d.jpg', 'output.mp4']
+        arguments: ['-framerate', '1', '-i', 'test%d.jpg', 'output.mp4']
       }, function (err, result) {
         if (err) {
           console.error(err);
