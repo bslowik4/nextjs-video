@@ -1,12 +1,10 @@
 'use client';
 import { useState } from "react"
-import { createVideo } from "@/app/lib/createVideo";
 
 export default function  ImageInput(){
     const [selectedImage, setSelectedImage] = useState("");
     const [writtenText, setWrittenText] = useState("");
     const [imageWithText, setImageWithText] = useState("");
-    const [createdVideo, setCreatedVideo] = useState("");
 
 
     function handleImage(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -40,10 +38,32 @@ export default function  ImageInput(){
         img.src = `${selectedImage}`;
     }
 
-    async function displayVideo() {
-        let video = await createVideo([selectedImage, imageWithText]);
-        console.log("działa")
-        setCreatedVideo(video);
+    async function sendImage() {
+        return new Promise((resolve, reject) => {
+            let formData = new FormData();
+    
+            formData.append(`state1_photo`, selectedImage);
+            formData.append(`state2_photo`, imageWithText);
+    
+            // Send the FormData to the backend
+            fetch('http://localhost:3001/edit/1234/create', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                reject(error);
+            });
+        });
     }
 
     return(
@@ -53,8 +73,7 @@ export default function  ImageInput(){
         <input type="text" onChange={handleText} className="text-black"/>
         <button type="button" onClick={addTextToImage}>Add text to image</button>
         <img src={imageWithText} alt={imageWithText}></img>
-        <button type="button" onClick={displayVideo}>Create video</button>
-        <video src={createdVideo} autoPlay controls id="test"></video>
+        <button type="button" onClick={sendImage}>Generate video</button>
         </>
 
     )
