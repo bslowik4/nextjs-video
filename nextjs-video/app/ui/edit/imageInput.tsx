@@ -81,7 +81,7 @@ export default function Home() {
                 u8arr[n] = bstr.charCodeAt(n);
             }
             const file = new File([u8arr], `processed_photo${index}.png`, { type: mime });
-            formData.append(`processed_photo${index}`, file);
+            formData.append(`processed_photo`, file);
         });
 
         try {
@@ -100,6 +100,8 @@ export default function Home() {
             console.error('Error:', error);
         }
     };
+
+    
 
     return (
         <div>
