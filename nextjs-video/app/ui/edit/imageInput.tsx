@@ -46,7 +46,7 @@ export default function  ImageInput(){
             formData.append(`state2_photo`, imageWithText);
     
             // Send the FormData to the backend
-            fetch('http://localhost:3001/edit/1234/create', {
+            fetch('http://localhost:3001/1234/image', {
                 method: 'POST',
                 body: formData
             })
