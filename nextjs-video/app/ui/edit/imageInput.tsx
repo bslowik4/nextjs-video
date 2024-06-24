@@ -5,6 +5,7 @@ export default function Home() {
     const [photos, setPhotos] = useState<string[]>([]);
     const [text, setText] = useState<string>('');
     const [processedImages, setProcessedImages] = useState<string[]>([]);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +102,13 @@ export default function Home() {
         }
     };
 
-    
+    const handlePrevImage = () => {
+        setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : photos.length - 1));
+    };
+
+    const handleNextImage = () => {
+        setCurrentIndex((prevIndex) => (prevIndex < photos.length - 1 ? prevIndex + 1 : 0));
+    };
 
     return (
         <div>
@@ -119,14 +126,15 @@ export default function Home() {
             </form>
             <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
             <div>
-                {processedImages.map((src, index) => (
-                    <img key={index} src={src} alt={`Processed ${index}`} />
-                ))}
+                {photos.length > 0 && (
+                    <div>
+                        <button onClick={handlePrevImage}>Previous</button>
+                        <button onClick={handleNextImage}>Next</button>
+                    </div>
+                )}
+                {photos.length > 0 && <img src={photos[currentIndex]} alt={`Photo ${currentIndex}`} />}
+                {processedImages.length > 0 && <img src={processedImages[currentIndex]} alt={`Processed ${currentIndex}`} />}
             </div>
         </div>
     );
 }
-
-
-
-
