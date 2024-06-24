@@ -111,30 +111,32 @@ export default function Home() {
     };
 
     return (
-        <div>
-            <h1>Upload Image and Add Text</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Upload Photos:</label>
-                    <input type="file" accept="image/*" multiple onChange={handleFileChange} />
-                </div>
-                <div>
-                    <label>Text:</label>
-                    <input type="text" value={text} onChange={handleTextChange} />
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-            <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+        <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Upload Image and Add Text</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-                {photos.length > 0 && (
-                    <div>
-                        <button onClick={handlePrevImage}>Previous</button>
-                        <button onClick={handleNextImage}>Next</button>
-                    </div>
-                )}
-                {photos.length > 0 && <img src={photos[currentIndex]} alt={`Photo ${currentIndex}`} />}
-                {processedImages.length > 0 && <img src={processedImages[currentIndex]} alt={`Processed ${currentIndex}`} />}
+                <label className="block text-lg font-medium text-gray-700">Upload Photos:</label>
+                <input type="file" accept="image/*" multiple onChange={handleFileChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+            </div>
+            <div>
+                <label className="block text-lg font-medium text-gray-700">Text:</label>
+                <input type="text" value={text} onChange={handleTextChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black" />
+            </div>
+            <button type="submit" className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
+        </form>
+        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+        <div className="mt-8">
+            {photos.length > 0 && (
+                <div className="flex justify-center items-center space-x-4">
+                    <button onClick={handlePrevImage} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Previous</button>
+                    <button onClick={handleNextImage} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Next</button>
+                </div>
+            )}
+            <div className="mt-4 flex justify-center">
+                {photos.length > 0 && <img src={photos[currentIndex]} alt={`Photo ${currentIndex}`} className="max-w-full h-auto" />}
+                {processedImages.length > 0 && <img src={processedImages[currentIndex]} alt={`Processed ${currentIndex}`} className="max-w-full h-auto" />}
             </div>
         </div>
+    </div>
     );
 }
