@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, ChangeEvent, FormEvent } from 'react';
+import { useState, useRef, ChangeEvent, FormEvent, useEffect } from 'react';
 
 export default function Home() {
     const [photos, setPhotos] = useState<string[]>([]);
@@ -8,10 +8,17 @@ export default function Home() {
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    useEffect(() => {
+        if (photos.length > 0) {
+            setCurrentIndex(0);
+        }
+    }, [photos]);
+
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(event.target.files || []);
         const objectUrls = files.map(file => URL.createObjectURL(file));
         setPhotos(objectUrls);
+        setProcessedImages([]);
     };
 
     const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -103,40 +110,44 @@ export default function Home() {
     };
 
     const handlePrevImage = () => {
-        setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : photos.length - 1));
+        setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : (photos.length > 0 ? photos.length - 1 : 0)));
     };
 
     const handleNextImage = () => {
-        setCurrentIndex((prevIndex) => (prevIndex < photos.length - 1 ? prevIndex + 1 : 0));
+        setCurrentIndex((prevIndex) => (prevIndex < (photos.length > 0 ? photos.length - 1 : 0) ? prevIndex + 1 : 0));
     };
 
     return (
         <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Upload Image and Add Text</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-lg font-medium text-gray-700">Upload Photos:</label>
-                <input type="file" accept="image/*" multiple onChange={handleFileChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-            </div>
-            <div>
-                <label className="block text-lg font-medium text-gray-700">Text:</label>
-                <input type="text" value={text} onChange={handleTextChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black" />
-            </div>
-            <button type="submit" className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
-        </form>
-        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
-        <div className="mt-8">
-            {photos.length > 0 && (
-                <div className="flex justify-center items-center space-x-4">
-                    <button onClick={handlePrevImage} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Previous</button>
-                    <button onClick={handleNextImage} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Next</button>
+            <h1 className="text-2xl font-bold mb-4">Upload Image and Add Text</h1>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                    <label className="block text-lg font-medium text-gray-700">Upload Photos:</label>
+                    <input type="file" accept="image/*" multiple onChange={handleFileChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
                 </div>
-            )}
-            <div className="mt-4 flex justify-center">
-                {photos.length > 0 && <img src={photos[currentIndex]} alt={`Photo ${currentIndex}`} className="max-w-full h-auto" />}
-                {processedImages.length > 0 && <img src={processedImages[currentIndex]} alt={`Processed ${currentIndex}`} className="max-w-full h-auto" />}
+                <div>
+                    <label className="block text-lg font-medium text-gray-700">Text:</label>
+                    <input type="text" value={text} onChange={handleTextChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black" />
+                </div>
+                <button type="submit" className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
+            </form>
+            <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+            <div className="mt-8">
+                {photos.length > 0 && (
+                    <div className="flex justify-center items-center space-x-4">
+                        <button onClick={handlePrevImage} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Previous</button>
+                        <button onClick={handleNextImage} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Next</button>
+                    </div>
+                )}
+                <div className="mt-4 flex justify-center items-center">
+                    {photos.length > 0 && (
+                        <div className="relative">
+                            <img src={photos[currentIndex]} alt={`Photo ${currentIndex}`} className="w-64 h-64 object-cover border-2 border-gray-300 rounded-md" />
+                            {processedImages.length > 0 && <img src={processedImages[currentIndex]} alt={`Processed ${currentIndex}`} className="absolute top-0 left-0 w-64 h-64 object-cover border-2 border-indigo-500 rounded-md" />}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
-    </div>
     );
 }
