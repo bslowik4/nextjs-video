@@ -1,7 +1,8 @@
-import ImageInput  from '@/app/ui/edit/imageInput';import { useEffect, useState } from 'react';
+import ImageInput  from '@/app/ui/edit/imageInput';
+import { useEffect, useState } from 'react';
 import fetcher from '../utils/fetch';
 import { getToken } from '../utils/auth';
-import ProtectedRoute from '../ui/edit/protectedRoute';
+import ProtectedRoute from '../ui/edit/protectedRout';
 import Layout from '@/app/layout';
 
 const EditPage: React.FC = () => {
@@ -11,8 +12,10 @@ const EditPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const token = getToken();
-        const data = await fetcher('/api/edit', token);
-        setEditData(data);
+        if (token) {
+          const data = await fetcher('/api/edit', token);
+          setEditData(data);
+        }
       } catch (err) {
         console.error('Error fetching data:', err);
       }
