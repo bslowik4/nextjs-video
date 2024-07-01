@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
 import { getToken } from '@/app/utils/auth';
